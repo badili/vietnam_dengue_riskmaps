@@ -1,4 +1,4 @@
-options(repos = c('https://mirrors.ebi.ac.uk/CRAN/'))
+# options(repos = c('https://mirrors.ebi.ac.uk/CRAN/'))
 # install.packages("maptools")
 # install.packages("spdep")
 # install.packages("rgdal")
@@ -13,6 +13,7 @@ options(repos = c('https://mirrors.ebi.ac.uk/CRAN/'))
 
 # prcomp()
 
+print("Loading the required libraries...")
 library(maptools)
 library(spdep)
 library(rgdal)
@@ -28,6 +29,7 @@ library(GISTools)
 library(rgeos)
 library(sp)
 
+print("Change the current working directory to the current directory...")
 working_dir = "./"
 
 setwd(working_dir)
@@ -36,24 +38,26 @@ setwd(working_dir)
 map <- readOGR(paste(working_dir, "maps/Provinces.shp", sep=""))
 
 #spatial relationships
+print("Read the spatial relationships and the shape files in...")
 map <- readOGR(paste(working_dir, "maps/Provinces.shp", sep=""))
 newmap <- spTransform(map, CRS("+proj=utm +zone=48N ellps=WGS84"))
 map$idmap <- 1:nrow(map) #generate provinces ids
 
+print("Load the map...")
 viet.map<-map
 temp <- poly2nb(viet.map, queen = FALSE)
+print("Do some crazy things...")
 nb2INLA("v.graph", temp)
 viet.adj <- paste(getwd(),"/v.graph",sep="")
 weights <- nb2listw(temp, style="W")
 
-#plot map and graph
-
+print("Plot the map and graph")
 plot(map, lwd=1)
 plot(temp, coordinates(map), add=TRUE, col="blue", lty=2)
 
-#data for modelling 
+#data for modelling
+print("Read in the data for modelling...")
 dengue4<-read.csv("dengue4.csv", header=TRUE)
-
 data<-data.frame(province=dengue4$province.x, year=dengue4$year,month=dengue4$month,time=dengue4$time,
                  case=as.integer(dengue4$cases),pop=dengue4$pop,evaporation=dengue4$evaporation,
                  w.velocity=dengue4$wind_veloc,rain=dengue4$rain, max.rain=dengue4$rain_max, 
@@ -70,14 +74,14 @@ data<-data.frame(province=dengue4$province.x, year=dengue4$year,month=dengue4$mo
                  perc_forest=dengue4$forest_perc, perc_shrub=dengue4$shrub_perc, perc_savana=dengue4$savana_perc,
                  perc_crop=dengue4$crop_perc, perc_urban=dengue4$urban_perc)
 
-names(data)
+# names(data)
 
 #####>>>>>>>>>> SPACE TIME INTERACTIONS -- TYPE II  <<<<<########
-
+print("Computing space and time interactions - Type II")
 ID.area.int<-data$idmap
 ID.year.int<-data$time
 
-names(data)
+# names(data)
 formula2<-case~1+tmin.lag2+I(tmin.lag2^2)+I(rainl2/100)+I((rainl2/100)^2)+alt+perc_urban+I(perc_urban^2)+perc_crop+
   f(idmap, model="bym", graph=viet.adj)+
   f(time, model="ar1")+
@@ -88,38 +92,37 @@ mod2 <- inla(formula2,family="poisson",data=data, E=popden,
                     verbose=TRUE, control.compute=list(dic=TRUE),
                     control.predictor = list(compute = TRUE))
 
-summary(mod2)
+# summary(mod2)
 ######################################################################################
 data.pred<-as.data.frame(c(dengue4, mod2$summary.fitted))
-names(data.pred)
+# names(data.pred)
 nrow(data.pred)
 names(mod2$summary.fitted)
 
+print("Load the plyr library")
 library(plyr)
-names(data.pred)
+# names(data.pred)
 data.pred<-rename(data.pred, c("X0.025quant"="low.quant","X0.5quant"="mid.quant", 
                          "X0.975quant"="upper.quant"))
 nrow(data.pred)
-
+print("Write the predictions to a csv file...")
 write.csv(data.pred, "data_pred.csv")
 
-
-
 ##overall map
-names(data.pred)
+# names(data.pred)
+print("Create the overall map")
 globalmean<-summaryBy(mean+low.quant+upper.quant~idmap, data = data.pred, 
                      FUN = function(x) { c(m = mean(as.numeric(x), na.rm=TRUE))})
 
 globalmean<-rename(globalmean, c("mean.m"="mean","low.quant.m"="lower_quantile", 
                                "upper.quant.m"="upper_quantile"))
 
-
 map.f<-fortify(map, region="idmap")
 data_glo<-merge(map.f, globalmean, by.x="id",by.y="idmap"); 
 final_glo<-data_glo[order(data_glo$order), ]
 
 ###########>>>>MEAN
-
+print("Calculating the mean...")
 ggplot()+
   geom_polygon(data = final_glo, 
                aes(x = long, y = lat, group = group, fill=mean), 
@@ -136,8 +139,7 @@ scale_fill_distiller(palette = "YlOrRd", direction=1, breaks = pretty_breaks(n =
 dev.off()
 
 ##########>>>>lower quantile
-
-
+print("Calculating the lower quantile...")
 tiff("global_mean_lq.tiff", width=6, height=6, units="cm", res=300)
 
 ggplot()+
@@ -156,8 +158,7 @@ ggplot()+
 dev.off()
 
 #######>>>>>>>>Upper quantile
-
-
+print("Calculating the upper quantile...")
 tiff("global_mean_uq.tiff", width=6, height=6, units="cm", res=300)
 
 ggplot()+
