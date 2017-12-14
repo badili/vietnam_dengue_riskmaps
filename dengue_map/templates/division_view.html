@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block main_content %}
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            {% include 'navbar.html' %}
+        </div>
+
+        <div class="wrapper wrapper-content">
+
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="container">
+                        {% if error_mssg is defined %}
+                        <div class='row'>
+                            <div class="alert alert-danger alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                {{ error_mssg }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if mssg is defined %}
+                        <div class='row'>
+                            <div class="alert alert-success alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                {{ mssg }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-5 m-b-xs">
+                                <div data-toggle="buttons" class="btn-group">
+                                    <label class="btn btn-sm btn-white active"> <input type="radio" id="option1" name="options"> County </label>
+                                </div>
+                                <a href="/" class="btn btn-outline btn-danger">
+                                    <i class="fa fa-refresh"></i> Reset
+                                </a>
+                            </div>
+                            <div class="col-sm-4 m-b-xs text-center text-warning">
+                                <h3 id='map_title'>{{ map_title}}</h3>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search" id='global_search' class="input-sm form-control">
+                                        <span class="input-group-btn"> <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="leaflet_map"></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 main_left">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Division Overview</h5><br/>
+                            <small>Division ID.</small>
+                            <strong>
+                                <small class="division_id"></small>
+                            </strong>
+                        </div>
+                        <div class="ibox-content">
+                            <h3>Risk Count</h3>
+                            <ul class='stat-list'>
+                                <li>
+                                    <h2 class="risk_count no-margins"></h2>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="ibox-content">
+                            <h3>Risk Mean</h3>
+                            <ul class='stat-list'>
+                                <li>
+                                    <h2 class="risk_mean no-margins"></h2>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="division_info" class="ibox-content">
+                            <h3>Risk Sum</h3>
+                            <ul class='stat-list'>
+                                <li>
+                                    <h2 class="risk_sum no-margins"></h2>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>
+            <strong>Created By</strong> Badili Innovations &copy; 2017
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

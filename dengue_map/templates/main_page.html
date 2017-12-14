@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block main_content %}
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            {% include 'navbar.html' %}
+        </div>
+
+        <div class="wrapper wrapper-content">
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="container">
+                        {% if error_mssg is defined %}
+                        <div class='row'>
+                            <div class="alert alert-danger alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                {{ error_mssg }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if mssg is defined %}
+                        <div class='row'>
+                            <div class="alert alert-success alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                {{ mssg }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-5 m-b-xs">
+                                <div data-toggle="buttons" class="btn-group">
+                                    <label class="btn btn-sm btn-white"> <input type="radio" id="option1" name="options"> County </label>
+                                    <label class="btn btn-sm btn-white active"> <input type="radio" id="option2" name="options"> Constituency </label>
+                                    <label class="btn btn-sm btn-white"> <input type="radio" id="option3" name="options"> Ward </label>
+                                </div>
+                                <a href="/" class="btn btn-outline btn-danger">
+                                    <i class="fa fa-refresh"></i> Reset
+                                </a>
+                            </div>
+                            <div class="col-sm-4 m-b-xs text-center text-warning">
+                                <h3 id='map_title'>{{ map_title}}</h3>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search" id='global_search' class="input-sm form-control"> 
+                                        <span class="input-group-btn"> <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="leaflet_map"></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 main_left">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>County Reporting Status (Presidential)</h5><br />
+                            <small class='pull-right text-danger'><strong>As at {{ last_check }}</strong></small>
+                        </div>
+                        <div class="ibox-content counties_list">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr><th>#</th><th>County</th><th>Reg Voters</th><th>Stations   </th><th>Progress</th></tr>
+                                </thead>
+                                <tbody>
+                                {% for county in reporting_status %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ county.county_name }}</td>
+                                    <td>{{ county.reg_voters }}</td>
+                                    <td colspan='2'>
+                                        <div>
+                                            <small>{{ county.stations_reported }}/{{ county.stations_count }}</small>
+                                            <div class="stat-percent text-warning">{{ county.perc_reported }}% </div>
+                                            <div class="progress progress-mini">
+                                                <div style="width: {{ county.perc_reported }}%;" class="progress-bar"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!--
+                    <div class="ibox-title">
+                        <h5>General Statistics</h5>
+                    </div>
+                    {% for voters in all_voters %}
+                    <div class="col-lg-6 float-e-margins">
+                        <div class="ibox-title">
+                            <h4 class='text-success'>{{ voters.year }}</h4>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{{ voters.v_count }}</h1>
+                            <small class='pull-right'>Total Voters</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% for general in all_general %}
+                    <div class="col-lg-6 float-e-margins">
+                        <div class="ibox-title">
+                            <h4 class='text-info'>2017</h4>
+                        </div>
+                        <div class="ibox-content">
+                            <h2 class=" pull-right no-margins text-warning"><strong>{{ general.i_count }}</strong></h2>
+                            <h4 class=''>{{ general.title }}</h4>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    -->
+
+                    {% for c_status in reporting_status %}
+                    <div class="col-lg-6 float-e-margins">
+                        <div class="ibox-title">
+                            <h4 class='text-info'>2017</h4>
+                        </div>
+                        <div class="ibox-content">
+                            <h2 class=" pull-right no-margins text-warning"><strong>{{ general.i_count }}</strong></h2>
+                            <h4 class=''>{{ general.title }}</h4>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer">
+            <div>
+                <strong>Created By</strong> Badili Innovations &copy; 2017
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

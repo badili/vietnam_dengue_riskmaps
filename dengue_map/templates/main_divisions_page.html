@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block main_content %}
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            {% include 'navbar.html' %}
+        </div>
+
+        <div class="wrapper wrapper-content">
+
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="container">
+                        {% if error_mssg is defined %}
+                        <div class='row'>
+                            <div class="alert alert-danger alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                {{ error_mssg }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if mssg is defined %}
+                        <div class='row'>
+                            <div class="alert alert-success alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                {{ mssg }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-4 m-b-xs">
+                                <div data-toggle="buttons" class="btn-group">
+                                    <label class="btn btn-sm btn-white active"> <input type="radio" id="kenya" name="options"> Kenya </label>
+                                    <label class="btn btn-sm btn-white"> <input type="radio" id="uganda" name="options"> Uganda </label>
+                                    <label class="btn btn-sm btn-white"> <input type="radio" id="tanzania" name="options"> Tanzania </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-center text-warning">
+                                <h4 id='map_title'>{{ map_title}}</h4>
+                            </div>
+                            <div class="col-sm-2">
+                                <a href="/" class="btn btn-outline btn-danger">
+                                    <i class="fa fa-refresh"></i> Reset
+                                </a>
+                            </div>
+                        </div>
+                        <div id="leaflet_map"></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 main_left">
+                    <div class="ibox float-e-margins">
+                        <div id='division_info' class="ibox-title">
+                            
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <small class="stats-label">Mean Risk</small>
+                                    <h4 id='risk_mean'></h4>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <small class="stats-label">Risk Factor</small>
+                                    <h4 id='risk_factor'></h4>
+                                </div>
+                                <div class="col-xs-4">
+                                    <small class="stats-label">Prev Risk Factor (Random)</small>
+                                    <h4 id='prev_risk_factor'></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <h3 id='div_state'>Inteventions</h3>
+                            <div id="interventions" class='panel-group'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="pull-right">
+            Designed and Developed by <strong><a href='https://badili.co.ke'>Badili Innovations</a></strong>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+<nav class="navbar navbar-static-top" role="navigation">
+    <div class="navbar-header">
+        <button aria-controls="navbar" aria-expanded="false"
+                data-target="#navbar" data-toggle="collapse"
+                class="navbar-toggle collapsed" type="button">
+            <i class="fa fa-reorder"></i>
+        </button>
+        <a href="{{url_for('index')}}" class="navbar-brand">#RVFRiskMap</a>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Select Period <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="#" class='youth_spread'>Jan 2018 - Mar 2018</a></li>
+                        <li><a href="#" class='youth_spread'>Apr 2018 - June 2018</a></li>
+                        <li><a href="#" class='voter_dist'>Jul 2018 - Sep 2018</a></li>
+                    </ul>
+            </li>
+            {% if divisions %}
+            <li class="dropdown" class="active">
+                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Districts <span class="caret"></span></a>
+                <ul role="menu" class="dropdown-menu scrollable-menu">
+                    {% for division in divisions %}
+                    <li>
+                        <a href="{{url_for('view_division_map', division_id=division.division_id)}}">{{division.division_name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endif %}
+
+        </ul>
+        <ul class="nav navbar-top-links navbar-right">
+            <li>
+                <!--<li>-->
+                <!--<a href="refresh_base_data">-->
+                <!--<i class="fa fa-refresh"></i> Refresh Base Data-->
+                <!--</a>-->
+                <!--</li>-->
+        </ul>
+    </div>
+</nav>
