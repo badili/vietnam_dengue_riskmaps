@@ -10,6 +10,11 @@
 # install.packages("plot3D")
 # install.packages("ggmap")
 # install.packages("GISTools")
+# 
+# Package for dealing with large dataset
+# install.packages("devtools")
+# library(devtools)
+# install_github("Nowosad/spDataLarge")
 
 # prcomp()
 
@@ -102,24 +107,22 @@ names(mod2$summary.fitted)
 print("Load the plyr library")
 library(plyr)
 # names(data.pred)
-data.pred<-rename(data.pred, c("X0.025quant"="low.quant","X0.5quant"="mid.quant", 
-                         "X0.975quant"="upper.quant"))
-nrow(data.pred)
+data.pred<-rename(data.pred, c("X0.025quant"="low.quant","X0.5quant"="mid.quant","X0.975quant"="upper.quant"))
+# nrow(data.pred)
 print("Write the predictions to a csv file...")
 write.csv(data.pred, "data_pred.csv")
 
 ##overall map
 # names(data.pred)
 print("Create the overall map")
-globalmean<-summaryBy(mean+low.quant+upper.quant~idmap, data = data.pred, 
-                     FUN = function(x) { c(m = mean(as.numeric(x), na.rm=TRUE))})
-
-globalmean<-rename(globalmean, c("mean.m"="mean","low.quant.m"="lower_quantile", 
-                               "upper.quant.m"="upper_quantile"))
+globalmean<-summaryBy(mean+low.quant+upper.quant~idmap, data = data.pred,FUN = function(x) { c(m = mean(as.numeric(x), na.rm=TRUE))})
+globalmean<-rename(globalmean, c("mean.m"="mean","low.quant.m"="lower_quantile","upper.quant.m"="upper_quantile"))
 
 map.f<-fortify(map, region="idmap")
 data_glo<-merge(map.f, globalmean, by.x="id",by.y="idmap"); 
 final_glo<-data_glo[order(data_glo$order), ]
+# head(final_glo)
+write.csv(final_glo, "final_glo.csv")
 
 ###########>>>>MEAN
 print("Calculating the mean...")
