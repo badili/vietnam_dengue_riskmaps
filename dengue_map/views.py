@@ -4,7 +4,7 @@ from cStringIO import StringIO as IO
 
 from flask import render_template, request
 
-from kenyan_divisions_viz import app
+from dengue_map import app
 from modules import KenyanDivisions
 from terminal_output import Terminal
 
