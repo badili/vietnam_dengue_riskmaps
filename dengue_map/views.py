@@ -5,7 +5,7 @@ from cStringIO import StringIO as IO
 from flask import render_template, request
 
 from dengue_map import app
-from modules import KenyanDivisions
+from modules import VietnamDengue
 from terminal_output import Terminal
 
 terminal = Terminal()
@@ -13,8 +13,8 @@ terminal = Terminal()
 
 @app.route('/')
 def index():
-    kenya_divisions = KenyanDivisions()
-    divisions = kenya_divisions.get_all_divisions_data()
+    d_map = VietnamDengue()
+    divisions = d_map.get_all_divisions_data()
     # divisions = []
     return render_template(
         'main_divisions_page.html',
@@ -25,8 +25,8 @@ def index():
 
 @app.route('/divisions_data')
 def base_divisions_map():
-    kenya_divisions = KenyanDivisions()
-    all_polygons = kenya_divisions.base_divisions_map()
+    d_map = VietnamDengue()
+    all_polygons = d_map.base_divisions_map()
     response = zip_response(json.dumps(all_polygons))
     return response
 
@@ -35,8 +35,8 @@ def base_divisions_map():
 def view_division():
     division_id = request.args.get('division_id')
     risk = request.args.get('risk')
-    kenya_divisions = KenyanDivisions()
-    all_polygons = kenya_divisions.get_division_info(division_id, risk)
+    d_map = VietnamDengue()
+    all_polygons = d_map.get_division_info(division_id, risk)
     response = zip_response(json.dumps(all_polygons))
     return response
 

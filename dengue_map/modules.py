@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-class KenyanDivisions():
+class VietnamDengue():
     def __init__(self):
         print "Initializing"
 
@@ -24,7 +24,7 @@ class KenyanDivisions():
         :return:
         """
         query = """
-            SELECT division_id, riskcount, riskmean, risksum, center_lat, division_name, center_long FROM division
+            SELECT province_id, center_lat, varname, center_long FROM provinces
         """
         all_results = db.engine.execute(query)
         return all_results
@@ -36,7 +36,7 @@ class KenyanDivisions():
         :return: a Polygon like data strcut that Leaflet JS can use
         """
         query = """
-            SELECT division_id, riskcount, riskmean, risksum, center_lat, center_long, division_name, district_name, province_name, geometry FROM division
+            SELECT province_id, center_lat, center_long, varname, geometry FROM provinces
         """
         all_results = db.engine.execute(query)
         to_return = []
@@ -44,40 +44,39 @@ class KenyanDivisions():
         # terminal.tprint(json.dumps(rvf_predictions), 'warn')
 
         for res in all_results:
-            division_id = res.division_id
+            province_id = res.province_id
             center_lat = res.center_lat
             center_long = res.center_long
             try:
-                pred = rvf_predictions[division_id]
+                pred = rvf_predictions[province_id]
             except Exception as e:
                 terminal.tprint(str(e), 'fail')
-                terminal.tprint('\tThe division id "%s" was not found in the prediction' % division_id, 'fail')
+                terminal.tprint('\tThe division id "%s" was not found in the prediction' % province_id, 'fail')
                 pred = -1
 
             geometry = json.loads(res.geometry)
+            # terminal.tprint(json.dumps(pred), 'fail')
             to_return.append({
-                'c_name': division_id,
-                'c_code': division_id,
+                'c_name': province_id,
+                'c_code': province_id,
                 'c_lat': center_lat,
                 'c_lon': center_long,
-                'division_name': res.division_name,
-                'district_name': res.district_name,
-                'province_name': res.province_name,
+                'varname': res.varname,
                 'polygon': json.dumps(geometry),
-                'risk_factor': pred
+                'risk_factor': pred[2003][1]['mean']
             })
 
         return to_return
 
-    def get_division_info(self, division_id, risk_factor):
+    def get_division_info(self, province_id, risk_factor):
         """
         Get all the data for the divisions, in order to plot them using the
         front end client
         :return: a Polygon like daa strcut that Leaflet JS can use
         """
         query = """
-            SELECT division_id, riskcount, riskmean, risksum, center_lat, center_long FROM division WHERE division_id={}
-        """.format(division_id)
+            SELECT province_id, center_lat, center_long FROM division WHERE province_id={}
+        """.format(province_id)
         all_results = db.engine.execute(query)
 
         all_interventions = defaultdict(dict)
@@ -125,7 +124,7 @@ class KenyanDivisions():
 
         to_return = []
         for res in all_results:
-            division_id = res.division_id
+            province_id = res.province_id
             center_lat = res.center_lat
             center_long = res.center_long
             risk_sum = res.risksum
@@ -133,8 +132,8 @@ class KenyanDivisions():
             risk_mean = res.riskmean
 
             to_return.append({
-                'c_name': division_id,
-                'c_code': division_id,
+                'c_name': province_id,
+                'c_code': province_id,
                 'risk_sum': risk_sum,
                 'risk_mean': risk_mean,
                 'risk_count': risk_count,
@@ -150,13 +149,44 @@ class KenyanDivisions():
         Read the predictions received from the model
         """
         has_started = False
-        with open('data/out.csv', mode='r') as infile:
+        with open('data/data_pred.csv', mode='r') as infile:
             reader = csv.reader(infile)
             my_predictions = defaultdict(dict)
             for rows in reader:
-                if not has_started:
+                if has_started is False:
                     has_started = True
                     continue
-                my_predictions[int(rows[1])] = rows[2]
+                province_name = rows[46]
+                province_id = int(rows[47])
+                year = int(rows[3])
+                month = int(rows[5])
+                mean = rows[54]
+                sd = rows[55]
+                low_quant = rows[56]
+                mid_quant = rows[57]
+                upper_quant = rows[58]
 
+                # check if the province id is already added
+                if province_id not in my_predictions:
+                    my_predictions[province_id] = defaultdict(dict)
+
+                # check if the year is already added
+                if year not in my_predictions[province_id]:
+                    my_predictions[province_id][year] = defaultdict(dict)
+
+                # check if the month is already added
+                if month not in my_predictions[province_id][year]:
+                    my_predictions[province_id][year][month] = defaultdict(dict)
+                else:
+                    terminal.tprint('The month %s - %s - %s is repeated' % (province_name, year, month), 'fail')
+
+                # add the data
+                my_predictions[province_id]['province_name'] = province_name
+                my_predictions[province_id][year][month]['mean'] = mean
+                my_predictions[province_id][year][month]['sd'] = sd
+                my_predictions[province_id][year][month]['low_quant'] = low_quant
+                my_predictions[province_id][year][month]['mid_quant'] = mid_quant
+                my_predictions[province_id][year][month]['upper_quant'] = upper_quant
+
+        # terminal.tprint(json.dumps(my_predictions), 'warn')
         return my_predictions

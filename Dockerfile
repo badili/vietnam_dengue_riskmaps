@@ -12,4 +12,4 @@ RUN apt-get update && \
 # Install the needed R packages
 
 # Install the python requisites
-pip install 'django<2.0'
+pip install 'django<2.0' MySQL-python

@@ -12,7 +12,8 @@ var RVF_DSF = function RVF_DSF(){
     };
     this.rvf_color = [
         // '#fff7ec', '#fee8c8', '#fdd49e', '#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#b30000', '#7f0000'
-        '#fee8c8', '#fdd49e', '#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#b30000', '#7f0000', '#ca0000'
+        // '#fee8c8', '#fdd49e', '#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#b30000', '#7f0000', '#ca0000'
+        "#FFFFCC", "#FFEDA0", "#FED976", "#FEB24C", "#FD8D3C", "#FC4E2A", "#E31A1C", "#BD0026", "#800026"
     ];
 
     // a regular expression for formatting the results
@@ -22,20 +23,19 @@ var RVF_DSF = function RVF_DSF(){
 }
 
 RVF_DSF.prototype.initiateMap = function(lat, lon, zoom, include_overlay = true){
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic29sb2luY2MiLCJhIjoiY2piNmF5bTAyM2hsdjMzcWt1MTBtNnhpMCJ9.Xr-HLkYndPlgbyCxktmwEw';
     if (lat == undefined) {
-        rvf_dsf.map = L.map('leaflet_map', rvf_dsf.default_zoom).setView([0.2934628,38.132656], 6);
+        rvf_dsf.map = L.map('leaflet_map', rvf_dsf.default_zoom).setView([16.982456,106.890051], 5.5);
     }
     else {
         rvf_dsf.map = L.map('leaflet_map', rvf_dsf.default_zoom).setView([lat, lon], zoom);
     }
 
     if(include_overlay){
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            id: 'mapbox.streets',
-            detectRetina: false
+        var CartoDB_Position = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
         }).addTo(rvf_dsf.map);
     }
 };
