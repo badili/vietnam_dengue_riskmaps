@@ -1,0 +1,40 @@
+{
+  "name": "Elections Viz 2017 - Badili",
+  "version": "0.0.1",
+  "authors": [
+    "Wangoru Kihara <wangoru.kihara@badili.co.ke>"
+  ],
+  "description": "An election vizualization system for the 2017 elections by Badili Innovations",
+  "main": "ran.py",
+  "keywords": [
+    "ElectionsKe2017",
+    "Visualization",
+    "Badili",
+    "Dashboard"
+  ],
+  "license": "GPLv3",
+  "homepage": "https://badili.co.ke/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "*",
+    "bootstrap": "*",
+    "jQuery-Autocomplete": "https://github.com/devbridge/jQuery-Autocomplete.git",
+    "bootstrap-validator": "^0.11.5",
+    "jquery-serialize-object": "^2.5.0",
+    "jquery-form": "^3.46.0",
+    "leaflet": "*",
+    "heatmap": "https://github.com/pa7/heatmap.js.git",
+    "heatmap.js-amd": "^2.0.5",
+    "hoverintent": "https://github.com/briancherne/jquery-hoverIntent",
+    "d3-cloud": "https://github.com/jasondavies/d3-cloud.git",
+    "d3": "^3.5.14",
+    "sprintf": "^1.1.1"
+  },
+  "private": true
+}
