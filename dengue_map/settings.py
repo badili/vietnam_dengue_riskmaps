@@ -34,7 +34,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -107,8 +106,8 @@ with open('dengue_map/app_config.json') as config_file:
             'PASSWORD': configs['default']['passwd'],
             'HOST': configs['default']['host'],
             'PORT': configs['default']['port']
+        }
     }
- 
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -146,7 +145,7 @@ USE_TZ = False
 STATIC_URL = 'static/'
 
 DEFAULT_LOCALE = 'English'
-DEFAULT_CHARSET = ='utf-8'
+DEFAULT_CHARSET = 'utf-8'
 
 LOCALES = {
     'English': 'en'
