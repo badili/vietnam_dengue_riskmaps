@@ -1,0 +1,4 @@
+*.pyc
+dengue_map/app_config.json
+maps
+env
