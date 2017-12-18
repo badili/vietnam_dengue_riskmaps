@@ -4,7 +4,7 @@
   "authors": [
     "Wangoru Kihara <wangoru.kihara@badili.co.ke>"
   ],
-  "description": "An election vizualization system for the 2017 elections by Badili Innovations",
+  "description": "A system for visualization of the Dengue Risk Map for Vietnam",
   "main": "ran.py",
   "keywords": [
     "Vietnam",
