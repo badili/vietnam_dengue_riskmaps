@@ -14,38 +14,55 @@ terminal = Terminal()
 @app.route('/')
 def index():
     d_map = VietnamDengue()
-    divisions = d_map.get_all_divisions_data()
-    # divisions = []
+    (pred, years, months, high_risk_provinces) = d_map.read_predictions(2012, 12)
     return render_template(
-        'main_divisions_page.html',
-        map_title='Oct 2017 - Dec 2017',
-        divisions=divisions
+        'provinces_view.html',
+        years=years,
+        months=months,
+        map_title=' Dengue Risk Map for December, 2012',
     )
 
 
 @app.route('/divisions_data')
 def base_divisions_map():
     d_map = VietnamDengue()
-    all_polygons = d_map.base_divisions_map()
+    all_polygons = d_map.base_divisions_map(2012, 1)
     response = zip_response(json.dumps(all_polygons))
     return response
 
 
-@app.route('/view_division')
-def view_division():
-    division_id = request.args.get('division_id')
-    risk = request.args.get('risk')
+@app.route('/get_updated_risk_values')
+def get_updated_risk_values():
+    year = request.args.get('year')
+    month = request.args.get('month')
     d_map = VietnamDengue()
-    all_polygons = d_map.get_division_info(division_id, risk)
-    response = zip_response(json.dumps(all_polygons))
+    risk_means = d_map.base_divisions_map(int(year), int(month), False)
+
+    response = app.response_class(
+        response=json.dumps(risk_means),
+        status=200,
+        mimetype='application/json'
+    )
+
+    response.data = json.dumps(risk_means)
+    response.headers['Content-Encoding'] = 'application/json'
+    response.headers['Vary'] = 'Accept-Encoding'
+    response.headers['Content-Length'] = len(response.data)
+
     return response
 
-@app.route('/view_division_map')
-def view_division_map():
+
+@app.route('/view_province_map')
+def view_province_map():
+    d_map = VietnamDengue()
+    (pred, years, months) = d_map.read_predictions()
     return render_template(
-        'division_view.html',
-        map_title=' Kenyan Divisions Distribution',
+        'provinces_view.html',
+        years=years,
+        months=months,
+        map_title=' Dengue Risk Map for Dec 2012',
     )
+
 
 def zip_response(json_data):
     gzip_buffer = IO()

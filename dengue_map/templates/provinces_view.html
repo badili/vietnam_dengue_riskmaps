@@ -30,13 +30,13 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-sm-9 m-b-xs text-center text-warning">
-                                <h4 id='map_title'>{{ map_title}}</h4>
-                            </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 m-b-xs">
                                 <a href="/" class="btn btn-outline btn-danger">
                                     <i class="fa fa-refresh"></i> Reset
                                 </a>
+                            </div>
+                            <div class="col-sm-6 m-b-xs text-center text-warning">
+                                <h3 id='map_title'>{{ map_title}}</h3>
                             </div>
                         </div>
                         <div id="leaflet_map"></div>
@@ -45,40 +45,30 @@
 
                 <div class="col-lg-5 main_left">
                     <div class="ibox float-e-margins">
-                        <div id='division_info' class="ibox-title">
-                            
-                        </div>
-                        <div class="ibox-content">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <small class="stats-label">Mean Risk</small>
-                                    <h4 id='risk_mean'></h4>
-                                </div>
-
-                                <div class="col-xs-4">
-                                    <small class="stats-label">Risk Factor</small>
-                                    <h4 id='risk_factor'></h4>
-                                </div>
-                                <div class="col-xs-4">
-                                    <small class="stats-label">Prev Risk Factor (Random)</small>
-                                    <h4 id='prev_risk_factor'></h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <h3 id='div_state'>Inteventions</h3>
-                            <div id="interventions" class='panel-group'>
-                            </div>
+                        <div id='top_provinces' class="ibox-content">
+                            <table class="table table-striped">
+                                <caption><h4>Top 20 high risk provinces for the selected Month</h4></caption>
+                                <thead>
+                                    <tr>
+                                        <th>#</th><th>Province</th><th>Risk Factor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    &nbsp;
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="footer">
-        <div class="pull-right">
-            Designed and Developed by <strong><a href='https://badili.co.ke'>Badili Innovations</a></strong>
+        <div>
+            Designed by <strong>Dr. Bernard Bett</strong>, Developed By <strong><a href="https://badili.co.ke">Badili Innovations</a></strong>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

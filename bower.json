@@ -1,5 +1,5 @@
 {
-  "name": "Elections Viz 2017 - Badili",
+  "name": "Vietnam Dengue - Risk Map",
   "version": "0.0.1",
   "authors": [
     "Wangoru Kihara <wangoru.kihara@badili.co.ke>"
@@ -7,13 +7,14 @@
   "description": "An election vizualization system for the 2017 elections by Badili Innovations",
   "main": "ran.py",
   "keywords": [
-    "ElectionsKe2017",
-    "Visualization",
-    "Badili",
-    "Dashboard"
+    "Vietnam",
+    "Dengue",
+    "Risk Map",
+    "R",
+    "Modelling"
   ],
   "license": "GPLv3",
-  "homepage": "https://badili.co.ke/",
+  "homepage": "http://azizi.ilri.org/vietnam_dengue/",
   "ignore": [
     "**/.*",
     "node_modules",
