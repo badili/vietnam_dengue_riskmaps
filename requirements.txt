@@ -23,7 +23,7 @@ sqlacodegen==1.1.6
 SQLAlchemy==1.1.13
 transaction==2.1.2
 trollius==2.1
-urllib3==1.22
+urllib3==1.26.5
 Werkzeug==0.12.2
 zc.lockfile==1.2.1
 ZConfig==3.2.0
